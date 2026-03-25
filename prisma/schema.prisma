@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum BotPersonality {
+  neutral
+  encouraging
+  strict
+}
+
+model User {
+  id                     String         @id @default(uuid())
+  email                  String         @unique
+  name                   String
+  hashedSub              String?        @unique
+  passwordHash           String?
+  country                String         @default("")
+  botPersonality         BotPersonality @default(neutral)
+  karmaDailyGoal         Int            @default(0)
+  karma                  Int            @default(0)
+  isNotificationReminder Boolean        @default(false)
+  karmaEntries           KarmaEntry[]
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
+}
+
+model KarmaEntry {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  karma     Int
+  text      String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
