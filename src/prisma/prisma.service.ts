@@ -15,7 +15,14 @@ export class PrismaService
     if (!connectionString) {
       throw new Error('DATABASE_URL is required');
     }
-    const pool = new Pool({ connectionString });
+    const pool = new Pool({
+      connectionString,
+      ssl: { rejectUnauthorized: false },
+      max: 10,
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 10000,
+      keepAlive: true,
+    });
     const adapter = new PrismaPg(pool);
     super({ adapter });
     this.pool = pool;

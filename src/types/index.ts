@@ -24,6 +24,7 @@ export interface SignUpRequest {
 
 export interface AuthResponse {
   accessToken: string;
+  refreshToken?: string;
 }
 
 export interface UpdateUserRequest {

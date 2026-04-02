@@ -42,7 +42,7 @@ export class AuthController {
       body.password,
     );
     this.setRefreshCookie(res, refreshToken);
-    return auth;
+    return { ...auth, refreshToken };
   }
 
   @Post('signUp')
@@ -62,7 +62,7 @@ export class AuthController {
       body.password,
     );
     this.setRefreshCookie(res, refreshToken);
-    return auth;
+    return { ...auth, refreshToken };
   }
 
   @Post('loginWithGoogle')
@@ -82,7 +82,7 @@ export class AuthController {
       body.accessTokenGoogle,
     );
     this.setRefreshCookie(res, refreshToken);
-    return auth;
+    return { ...auth, refreshToken };
   }
 
   @Post('refresh-token')
@@ -96,11 +96,13 @@ export class AuthController {
   async refreshToken(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
+    @Body() body: { refreshToken?: string },
   ): Promise<AuthResponse> {
-    const token = req.cookies?.[REFRESH_COOKIE] as string | undefined;
+    // Accept token from httpOnly cookie (web) or request body (mobile)
+    const token = (req.cookies?.[REFRESH_COOKIE] as string | undefined) ?? body.refreshToken;
     const { auth, refreshToken } = await this.authService.refresh(token);
     this.setRefreshCookie(res, refreshToken);
-    return auth;
+    return { ...auth, refreshToken };
   }
 
   /** Clears the httpOnly refresh cookie (browser clients). Client should also drop in-memory access token. */
