@@ -7,9 +7,9 @@ datasource db {
 }
 
 enum BotPersonality {
-  neutral
-  encouraging
-  strict
+  usual
+  business
+  bad_guy
 }
 
 model User {
@@ -19,7 +19,7 @@ model User {
   hashedSub              String?        @unique
   passwordHash           String?
   country                String         @default("")
-  botPersonality         BotPersonality @default(neutral)
+  botPersonality         BotPersonality @default(usual)
   karmaDailyGoal         Int            @default(0)
   karma                  Int            @default(0)
   isNotificationReminder Boolean        @default(false)

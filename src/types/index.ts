@@ -5,7 +5,7 @@ export interface User {
   name: string;
   email: string;
   country: string;
-  botPersonality: 'neutral' | 'encouraging' | 'strict';
+  botPersonality: 'usual' | 'business' | 'bad_guy';
   karmaDailyGoal: number;
   karma: number;
   isNotificationReminder: boolean;
@@ -29,7 +29,7 @@ export interface AuthResponse {
 
 export interface UpdateUserRequest {
   country?: string;
-  botPersonality?: 'neutral' | 'encouraging' | 'strict';
+  botPersonality?: 'usual' | 'business' | 'bad_guy';
   karmaDailyGoal?: number;
   isNotificationReminder?: boolean;
 }

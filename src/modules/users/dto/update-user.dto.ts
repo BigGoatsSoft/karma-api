@@ -9,7 +9,7 @@ import {
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import type { UpdateUserRequest } from '../../../types';
 
-const personalities = ['neutral', 'encouraging', 'strict'] as const;
+const personalities = ['usual', 'business', 'bad_guy'] as const;
 
 export class UpdateUserDto implements UpdateUserRequest {
   @ApiPropertyOptional({ example: 'US' })
@@ -19,11 +19,11 @@ export class UpdateUserDto implements UpdateUserRequest {
 
   @ApiPropertyOptional({
     enum: personalities,
-    example: 'encouraging',
+    example: 'usual',
   })
   @IsOptional()
   @IsIn(personalities)
-  botPersonality?: 'neutral' | 'encouraging' | 'strict';
+  botPersonality?: 'usual' | 'business' | 'bad_guy';
 
   @ApiPropertyOptional({ example: 100 })
   @IsOptional()

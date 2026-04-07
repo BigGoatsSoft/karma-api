@@ -26,8 +26,8 @@ export class UserResponseDto {
   @ApiProperty()
   country: string;
 
-  @ApiProperty({ enum: ['neutral', 'encouraging', 'strict'] })
-  botPersonality: 'neutral' | 'encouraging' | 'strict';
+  @ApiProperty({ enum: ['usual', 'business', 'bad_guy'] })
+  botPersonality: 'usual' | 'business' | 'bad_guy';
 
   @ApiProperty()
   karmaDailyGoal: number;
