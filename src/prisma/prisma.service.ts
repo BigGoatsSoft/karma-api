@@ -15,9 +15,12 @@ export class PrismaService
     if (!connectionString) {
       throw new Error('DATABASE_URL is required');
     }
+    const requireSsl = connectionString.includes('sslmode=require') ||
+      (!connectionString.includes('sslmode=disable') && !connectionString.includes('localhost') && !connectionString.includes('127.0.0.1'));
+
     const pool = new Pool({
       connectionString,
-      ssl: { rejectUnauthorized: false },
+      ssl: requireSsl ? { rejectUnauthorized: false } : false,
       max: 10,
       idleTimeoutMillis: 30000,
       connectionTimeoutMillis: 10000,

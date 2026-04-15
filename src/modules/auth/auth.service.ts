@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import type { AuthResponse } from '../../types';
 import { GoogleOAuthService } from './google-oauth.service';
+import { AppleOAuthService } from './apple-oauth.service';
 import { UsersService } from '../users/users.service';
 
 const REFRESH_TOKEN_TYP = 'refresh';
@@ -14,6 +15,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly usersService: UsersService,
     private readonly googleOAuth: GoogleOAuthService,
+    private readonly appleOAuth: AppleOAuthService,
   ) {}
 
   async signUp(
@@ -44,6 +46,18 @@ export class AuthService {
     const profile =
       await this.googleOAuth.getProfileFromAccessToken(accessTokenGoogle);
     const entity = await this.usersService.upsertGoogleUser(profile);
+    return this.buildTokens(entity.id);
+  }
+
+  async loginWithApple(
+    identityToken: string,
+    fullName?: string | null,
+  ): Promise<{ auth: AuthResponse; refreshToken: string }> {
+    const profile = await this.appleOAuth.getProfileFromIdentityToken(
+      identityToken,
+      fullName,
+    );
+    const entity = await this.usersService.upsertAppleUser(profile);
     return this.buildTokens(entity.id);
   }
 

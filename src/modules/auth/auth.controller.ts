@@ -16,6 +16,7 @@ import {
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { LoginWithGoogleDto } from './dto/login-with-google.dto';
+import { LoginWithAppleDto } from './dto/login-with-apple.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 
 const REFRESH_COOKIE = 'refreshToken';
@@ -80,6 +81,26 @@ export class AuthController {
   ): Promise<AuthResponse> {
     const { auth, refreshToken } = await this.authService.loginWithGoogle(
       body.accessTokenGoogle,
+    );
+    this.setRefreshCookie(res, refreshToken);
+    return { ...auth, refreshToken };
+  }
+
+  @Post('loginWithApple')
+  @ApiOperation({ summary: 'Login with Apple identity token' })
+  @ApiBody({ type: LoginWithAppleDto })
+  @ApiOkResponse({
+    description: 'Returns access token and sets refreshToken httpOnly cookie',
+    type: AuthResponseDto,
+  })
+  @ApiUnauthorizedResponse({ description: 'Invalid/expired Apple token' })
+  async loginWithApple(
+    @Body() body: LoginWithAppleDto,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<AuthResponse> {
+    const { auth, refreshToken } = await this.authService.loginWithApple(
+      body.identityToken,
+      body.fullName,
     );
     this.setRefreshCookie(res, refreshToken);
     return { ...auth, refreshToken };

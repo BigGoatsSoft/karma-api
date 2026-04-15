@@ -129,6 +129,8 @@ export class KarmaService {
   }
 
   async addKarma(userId: string, text: string): Promise<KarmaResponse> {
+    await this.usersService.checkResetAndDeductCoins(userId);
+
     const user = await this.usersService.requireById(userId);
 
     let message: string;

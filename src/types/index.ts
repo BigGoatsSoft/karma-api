@@ -9,6 +9,9 @@ export interface User {
   karmaDailyGoal: number;
   karma: number;
   isNotificationReminder: boolean;
+  karmaCoins: number;
+  subscriptionType: string;
+  subscriptionExpiry?: string | null;
 }
 
 export interface LoginRequest {

@@ -37,6 +37,15 @@ export class UserResponseDto {
 
   @ApiProperty()
   isNotificationReminder: boolean;
+
+  @ApiProperty()
+  karmaCoins: number;
+
+  @ApiProperty()
+  subscriptionType: string;
+
+  @ApiProperty({ required: false, nullable: true })
+  subscriptionExpiry?: string | null;
 }
 
 export class KarmaResponseDto {
